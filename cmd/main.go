@@ -3,26 +3,30 @@ package main
 import (
 	"fmt"
 	"log"
-	"mygo/internal" // Импорт пакета с InitDB
-	"net/http"
+
+	"mygo/internal/db"
+	"mygo/internal/handler"
+	"mygo/internal/repository"
+	"mygo/internal/router"
 )
 
 func main() {
-	// Инициализация подключения к БД
-	dataSourceName := "host=localhost port=5432 user=postgres password=2333 dbname=postgres sslmode=disable"
-	internal.InitDB(dataSourceName)
+	dsn := "host=localhost port=5432 user=postgres password=2333 dbname=postgres sslmode=disable"
 
-	// Регистрация обработчиков
-	http.HandleFunc("/banners", internal.GetBannersHandler)           // Получение всех баннеров
-	http.HandleFunc("/banners/create", internal.CreateBannerHandler)  // Создание нового баннера
-	http.HandleFunc("/banners/update/", internal.UpdateBannerHandler) // Обновление баннера
-	http.HandleFunc("/banners/delete/", internal.DeleteBannerHandler) // Удаление баннера
-
-	// Запуск сервера
-	log.Println("Сервер запущен на порту 8080")
-	if err := http.ListenAndServe(":8080", nil); err != nil {
-		log.Fatal("Ошибка запуска сервера:", err) // Логируем ошибку и завершаем программу
+	database, err := db.Connect(dsn)
+	if err != nil {
+		log.Fatal("failed to connect db", err)
 	}
 
-	fmt.Println("Сервер запущен...")
+	repo := repository.NewRepository(database)
+	handler := handler.NewHander(repo)
+
+	r := router.NewRouter()
+	r.Register(handler)
+
+	if err := r.Run(":8080"); err != nil {
+		log.Fatal("Ошибка запуска сервера:", err)
+	}
+
+	fmt.Println("подвал")
 }
