@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// Функция регистрации маршрутов в Gin
 func RegisterRoutes(r *gin.Engine, handler *handler.Handler) {
 	r.GET("/banners", handler.GetBanners)             // Регистрируем GET
 	r.POST("/banners/create", handler.CreateBanner)   // Регистрируем POST

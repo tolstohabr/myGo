@@ -2,7 +2,7 @@ package repository
 
 import (
 	"database/sql"
-	models "mygo/internal/model"
+	"mygo/internal/model"
 )
 
 type Repository struct {
@@ -13,7 +13,7 @@ func NewRepository(db *sql.DB) *Repository {
 	return &Repository{db: db}
 }
 
-func (r *Repository) GetBanners() ([]models.Banner, error) {
+func (r *Repository) GetBanners() ([]model.Banner, error) {
 	query := `
 		SELECT * 
 		FROM banners 
@@ -26,9 +26,9 @@ func (r *Repository) GetBanners() ([]models.Banner, error) {
 	}
 	defer rows.Close()
 
-	var banners []models.Banner
+	var banners []model.Banner
 	for rows.Next() {
-		var b models.Banner
+		var b model.Banner
 		if err := rows.Scan(&b.ID, &b.JSONData, &b.FeatureID, &b.IsActive); err != nil {
 			return nil, err
 		}
@@ -39,7 +39,7 @@ func (r *Repository) GetBanners() ([]models.Banner, error) {
 	return banners, nil
 }
 
-func (r *Repository) CreateBanner(banner models.Banner) error {
+func (r *Repository) CreateBanner(banner model.Banner) error {
 	query := `
 		INSERT INTO banners (json_data, feature_id, is_active) 
 		VALUES ($1, $2, $3)
@@ -52,7 +52,7 @@ func (r *Repository) CreateBanner(banner models.Banner) error {
 	return nil
 }
 
-func (r *Repository) UpdateBanner(banner models.Banner) error {
+func (r *Repository) UpdateBanner(banner model.Banner) error {
 	query := `
 		UPDATE banners 
 		SET json_data = $1, feature_id = $2, is_active = $3 
