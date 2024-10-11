@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"log"
 
+	"github.com/gin-gonic/gin"
+
 	"mygo/internal/db"
 	"mygo/internal/handler"
 	"mygo/internal/repository"
@@ -21,8 +23,9 @@ func main() {
 	repo := repository.NewRepository(database)
 	handler := handler.NewHander(repo)
 
-	r := router.NewRouter()
-	r.Register(handler)
+	r := gin.Default()
+
+	router.RegisterRoutes(r, handler)
 
 	if err := r.Run(":8080"); err != nil {
 		log.Fatal("Ошибка запуска сервера:", err)
