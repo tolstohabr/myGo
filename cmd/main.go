@@ -20,7 +20,7 @@ func main() {
 	}
 
 	repo := repository.NewRepository(database)
-	handler := handler.NewHander(repo)
+	handler := handler.NewHandler(repo)
 
 	r := gin.Default()
 

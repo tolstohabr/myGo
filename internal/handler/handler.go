@@ -20,7 +20,7 @@ type Handler struct {
 	repo Repository
 }
 
-func NewHander(repo Repository) *Handler {
+func NewHandler(repo Repository) *Handler {
 	return &Handler{repo: repo}
 }
 
