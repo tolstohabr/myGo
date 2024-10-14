@@ -1,9 +1,9 @@
 package router
 
 import (
-	"mygo/internal/handler"
-
 	"github.com/gin-gonic/gin"
+
+	"mygo/internal/handler"
 )
 
 func RegisterRoutes(r *gin.Engine, handler *handler.Handler) {
