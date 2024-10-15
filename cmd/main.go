@@ -1,9 +1,8 @@
 package main
 
 import (
+	"flag"
 	"log"
-
-	"github.com/gin-gonic/gin"
 
 	"mygo/internal/config"
 	"mygo/internal/db"
@@ -12,11 +11,12 @@ import (
 	"mygo/internal/router"
 )
 
+var configPath = flag.String("config", "./config/config.yaml", "config path")
+
 func main() {
-	cfg, err := config.LoadConfig()
-	if err != nil {
-		log.Fatal("failed to load config:", err)
-	}
+	flag.Parse()
+
+	cfg := config.MustLoad(*configPath)
 
 	database, err := db.Connect(cfg.DSN)
 	if err != nil {
@@ -26,27 +26,14 @@ func main() {
 	repo := repository.NewRepository(database)
 	handler := handler.NewHandler(repo)
 
-	r := gin.Default()
-
-	r.Use(LoggerMW())
-
-	router.RegisterRoutes(r, handler)
-
-	if err := r.Run(":8080"); err != nil {
-		log.Fatal("Ошибка запуска сервера:", err)
+	router := router.NewHttpRouter()
+	router.Register(handler)
+	if err := router.Run("localhost:8080"); err != nil {
+		log.Fatal("sdfsdsd", err)
 	}
-}
+	//TODO: "localhost:8080" из кофниг
 
-func LoggerMW() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		log.Println("до")
-		c.Next() //я не понимаю как эта херня работет
-		log.Println("после")
+	//TODO: сервисы. хендлер вызыввает серавис и наоборот. Сделать у них интерфейсы(у хендлера интерфейс сервиса, а у сервиса интерфейс репозитория)
 
-		log.Printf("Тип и путь: %s %s      | Статус: %d     |\n",
-			c.Request.Method,
-			c.Request.URL.Path,
-			c.Writer.Status(),
-		)
-	}
+	//TODO: аутентификация в Go посмотреть (как с мидлвере)
 }

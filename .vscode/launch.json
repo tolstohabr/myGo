@@ -10,7 +10,7 @@
             "program": "${workspaceFolder}/cmd",
             "cwd": "${workspaceFolder}",
             "args": [
-
+                
             ]
         }
     ]
