@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func LoggerMW() gin.HandlerFunc {
+func LoggerMiddleware() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		log.Println("до")
 		ctx.Next() //говно

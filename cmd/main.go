@@ -1,3 +1,6 @@
+//TODO: сервисы. хендлер вызыввает серавис и наоборот. Сделать у них интерфейсы(у хендлера интерфейс сервиса, а у сервиса интерфейс репозитория)
+//TODO: аутентификация в Go посмотреть (как с мидлвере)
+
 package main
 
 import (
@@ -25,15 +28,9 @@ func main() {
 
 	repo := repository.NewRepository(database)
 	handler := handler.NewHandler(repo)
-
 	router := router.NewHttpRouter()
 	router.Register(handler)
-	if err := router.Run("localhost:8080"); err != nil {
-		log.Fatal("sdfsdsd", err)
+	if err := router.Run(cfg.HOST); err != nil {
+		log.Fatal("fdfdf", err)
 	}
-	//TODO: "localhost:8080" из кофниг
-
-	//TODO: сервисы. хендлер вызыввает серавис и наоборот. Сделать у них интерфейсы(у хендлера интерфейс сервиса, а у сервиса интерфейс репозитория)
-
-	//TODO: аутентификация в Go посмотреть (как с мидлвере)
 }

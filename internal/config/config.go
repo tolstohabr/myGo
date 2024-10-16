@@ -8,7 +8,8 @@ import (
 )
 
 type Config struct {
-	DSN string `yaml:"dsn"`
+	DSN  string `yaml:"dsn"`
+	HOST string `yaml:"host"`
 }
 
 func MustLoad(configPath string) *Config {

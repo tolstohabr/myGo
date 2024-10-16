@@ -20,7 +20,7 @@ type HttpRouter struct {
 func NewHttpRouter() *HttpRouter {
 	router := gin.Default()
 
-	router.Use(middleware.LoggerMW())
+	router.Use(middleware.LoggerMiddleware())
 
 	return &HttpRouter{router: router}
 }
