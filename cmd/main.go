@@ -12,6 +12,7 @@ import (
 	"mygo/internal/handler"
 	"mygo/internal/repository"
 	"mygo/internal/router"
+	"mygo/internal/service"
 )
 
 var configPath = flag.String("config", "./config/config.yaml", "config path")
@@ -27,7 +28,11 @@ func main() {
 	}
 
 	repo := repository.NewRepository(database)
-	handler := handler.NewHandler(repo)
+
+	//handler := handler.NewHandler(repo)
+	service := service.NewService(repo)
+	handler := handler.NewHandler(service)
+
 	router := router.NewHttpRouter()
 	router.Register(handler)
 	if err := router.Run(cfg.HOST); err != nil {

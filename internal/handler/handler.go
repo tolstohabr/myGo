@@ -9,7 +9,7 @@ import (
 	"mygo/internal/model"
 )
 
-type Repository interface {
+type Service interface {
 	GetBanners() ([]model.Banner, error)
 	CreateBanner(banner model.Banner) error
 	UpdateBanner(banner model.Banner) error
@@ -17,15 +17,15 @@ type Repository interface {
 }
 
 type Handler struct {
-	repo Repository
+	service Service
 }
 
-func NewHandler(repo Repository) *Handler {
-	return &Handler{repo: repo}
+func NewHandler(service Service) *Handler {
+	return &Handler{service: service}
 }
 
 func (h *Handler) GetBanners(c *gin.Context) {
-	banners, err := h.repo.GetBanners()
+	banners, err := h.service.GetBanners()
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": err.Error()})
 		return
@@ -40,7 +40,7 @@ func (h *Handler) CreateBanner(c *gin.Context) {
 		return
 	}
 
-	if err := h.repo.CreateBanner(banner); err != nil {
+	if err := h.service.CreateBanner(banner); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -55,7 +55,7 @@ func (h *Handler) UpdateBanner(c *gin.Context) {
 		return
 	}
 
-	if err := h.repo.UpdateBanner(banner); err != nil {
+	if err := h.service.UpdateBanner(banner); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
@@ -76,7 +76,7 @@ func (h *Handler) DeleteBanner(c *gin.Context) {
 		return
 	}
 
-	if err := h.repo.DeleteBanner(id); err != nil {
+	if err := h.service.DeleteBanner(id); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
