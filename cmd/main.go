@@ -28,8 +28,6 @@ func main() {
 	}
 
 	repo := repository.NewRepository(database)
-
-	//handler := handler.NewHandler(repo)
 	service := service.NewService(repo)
 	handler := handler.NewHandler(service)
 
