@@ -25,20 +25,3 @@ func JWTMiddleware(c *gin.Context) {
 
 	c.Next()
 }
-
-////////////////////////////////////////////////////////////////////////////
-/*
-func LoggerMiddleware() gin.HandlerFunc {
-	return func(ctx *gin.Context) {
-		log.Println("до")
-		ctx.Next() //говно
-		log.Println("после")
-
-		log.Printf("Тип и путь: %s %s      | Статус: %d     |\n",
-			ctx.Request.Method,
-			ctx.Request.URL.Path,
-			ctx.Writer.Status(),
-		)
-	}
-}
-*/
