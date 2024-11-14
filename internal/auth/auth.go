@@ -6,7 +6,7 @@ import (
 	"github.com/dgrijalva/jwt-go"
 )
 
-var jwtKey = []byte("todo_secret_key")
+var jwtKey = []byte("JWT_SECRET_KEY") //небезопасно
 
 type Claims struct {
 	Username string `json:"username"`
