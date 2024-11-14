@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	"mygo/internal/auth"
 	"mygo/internal/model"
 )
 
@@ -16,9 +17,41 @@ type Service interface {
 	DeleteBanner(id int) error
 }
 
+// //////////////////////////////////////////////////////////////////
+type Credentials struct {
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+////////////////////////////////////////////////////////////////////
+
 type Handler struct {
 	service Service
 }
+
+// //////////////////////////////////////////////////////////////////////
+func (h *Handler) Login(c *gin.Context) {
+	var creds Credentials
+	if err := c.ShouldBindJSON(&creds); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
+		return
+	}
+
+	if creds.Username != "user" || creds.Password != "password" {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid credentials"})
+		return
+	}
+
+	token, err := auth.GenerateJWT(creds.Username)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"token": token})
+}
+
+///////////////////////////////////////////////////////////////////////
 
 func NewHandler(service Service) *Handler {
 	return &Handler{service: service}
