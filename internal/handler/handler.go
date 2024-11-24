@@ -6,8 +6,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"mygo/internal/auth"
 	"mygo/internal/model"
+	"mygo/internal/service"
 )
 
 type Service interface {
@@ -42,7 +42,7 @@ func (h *Handler) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := auth.GenerateJWT(creds.Username)
+	token, err := service.GenerateJWT(creds.Username)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not generate token"})
 		return
